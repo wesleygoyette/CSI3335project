@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Team Selection</title>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0px 16px;
+            }
+
+            form {
+                background-color: #ffffff;
+                padding: 50px 40px;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                width: 350px;
+                color: rgb(100,100,100);
+                margin: 0px 12px;
+            }
+
+            h1 {
+                text-align: left;
+                font-weight: 500;
+            }
+
+            div {
+                margin-bottom: 20px;
+            }
+
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            select {
+                width: 100%;
+                padding: 10px;
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+                padding: 12px;
+                border: none;
+                border-radius: 4px;
+                background-color: rgb(105,108,255);
+                color: #ffffff;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+            input[type="submit"]:hover {
+                opacity: 90%;
+            }
+
+            input[type="submit"]:active {
+                opacity: 90%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <form class="card">
+
+            <h1>Select a team</h1>
+
+            <div>
+                <label for="team">Team Name</label>
+                <select id="team" name="team" onchange="filterYears()">
+                {% for team in teams %}
+                    <option value="{{ team }}">{{ team }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="year">Year</label>
+                <select id="year" name="year">
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Search">
+            </div>
+
+            <script>
+                const team_yers_dict = {{ team_years_dict|tojson|safe }};
+
+                function filterYears() {
+                const selectedTeam = document.getElementById('team').value;
+                const yearSelect = document.getElementById('year');
+
+                // Clear existing options
+                yearSelect.innerHTML = '';
+
+                // Check if team_years_dict exists
+                if (team_yers_dict) {
+                    const availableYears = team_yers_dict[selectedTeam] || [];
+
+                    // Add options for available years for the selected team
+                    availableYears.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.innerText = year;
+                    yearSelect.appendChild(option);
+                    });
+                }
+                }
+
+                // Call filterYears on initial page load to populate years for the first selected team
+                filterYears();
+            </script>
+            </form>
+        </div>
+    </body>
+</html>

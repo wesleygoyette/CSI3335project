@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Team Roster</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 128px 16px;
+        }
+
+        .container {
+            width: 100%;
+            min-width: 300px;
+            max-width: 800px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: rgb(100,100,100);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2 {
+            text-align: left;
+            font-weight: 100;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 32px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        a {
+            margin-top: 32px;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: rgb(105,108,255);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 90%;
+        }
+
+        a:active {
+            opacity: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>The {{ year }} {{ team }}</h1>
+            
+            <h2>Batting Statistics</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>G</th>
+                        <th>AB</th>
+                        <th>R</th>
+                        <th>H</th>
+                        <th>2B</th>
+                        <th>3B</th>
+                        <th>HR</th>
+                        <th>RBI</th>
+                        <th>SB</th>
+                        <th>CS</th>
+                        <th>BB</th>
+                        <th>SO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat, person in batting_stats %}
+                        <tr>
+                            <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
+                            <td>{{ stat.b_G }}</td>
+                            <td>{{ stat.b_AB }}</td>
+                            <td>{{ stat.b_R }}</td>
+                            <td>{{ stat.b_H }}</td>
+                            <td>{{ stat.b_2B }}</td>
+                            <td>{{ stat.b_3B }}</td>
+                            <td>{{ stat.b_HR }}</td>
+                            <td>{{ stat.b_RBI }}</td>
+                            <td>{{ stat.b_SB }}</td>
+                            <td>{{ stat.b_CS }}</td>
+                            <td>{{ stat.b_BB }}</td>
+                            <td>{{ stat.b_SO }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <h2>Pitching Statistics</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>G</th>
+                        <th>GS</th>
+                        <th>CG</th>
+                        <th>SHO</th>
+                        <th>SV</th>
+                        <th>IPOuts</th>
+                        <th>H</th>
+                        <th>ER</th>
+                        <th>HR</th>
+                        <th>BB</th>
+                        <th>SO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat, person in pitching_stats %}
+                        <tr>
+                            <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
+                            <td>{{ stat.p_W }}</td>
+                            <td>{{ stat.p_L }}</td>
+                            <td>{{ stat.p_G }}</td>
+                            <td>{{ stat.p_GS }}</td>
+                            <td>{{ stat.p_CG }}</td>
+                            <td>{{ stat.p_SHO }}</td>
+                            <td>{{ stat.p_SV }}</td>
+                            <td>{{ stat.p_IPOuts }}</td>
+                            <td>{{ stat.p_H }}</td>
+                            <td>{{ stat.p_ER }}</td>
+                            <td>{{ stat.p_HR }}</td>
+                            <td>{{ stat.p_BB }}</td>
+                            <td>{{ stat.p_SO }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <a href="/">Search again</a>
+        </div>
+    </div>
+</body>
+</html>
