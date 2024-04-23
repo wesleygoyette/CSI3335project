@@ -195,7 +195,6 @@ def home():
         batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
         pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
 
-
         return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats)
 
     team_names = db.session.query(Team.team_name).distinct().order_by(Team.team_name).all()
@@ -203,7 +202,7 @@ def home():
     team_names_list = [name[0] for name in team_names]
 
     # Query team names and corresponding years
-    team_data = db.session.query(Team.team_name, Team.yearID).distinct().order_by(Team.team_name, Team.yearID).all()
+    team_data = db.session.query(Team.team_name, Team.yearID).distinct().order_by(Team.team_name, Team.yearID.desc()).all()
     
     # Convert the result to a dictionary where keys are team names and values are lists of years
     team_years_dict = {}
