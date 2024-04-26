@@ -78,7 +78,11 @@
                 <label for="team">Team Name</label>
                 <select id="team" name="team" onchange="filterYears()">
                 {% for team in teams %}
-                    <option value="{{ team }}">{{ team }}</option>
+                    <option 
+                    {% if prevTeam == team %}
+                    selected
+                    {% endif %} 
+                    value="{{ team }}">{{ team }}</option>
                 {% endfor %}
                 </select>
             </div>
@@ -92,7 +96,8 @@
             </div>
 
             <script>
-                const team_yers_dict = {{ team_years_dict|tojson|safe }};
+
+                const team_yers_dict = JSON.parse('{{ team_years_dict|tojson|safe }}');
 
                 function filterYears() {
                 const selectedTeam = document.getElementById('team').value;
@@ -110,6 +115,7 @@
                     const option = document.createElement('option');
                     option.value = year;
                     option.innerText = year;
+                    option.selected = '{{ prevYear }}' == year;
                     yearSelect.appendChild(option);
                     });
                 }

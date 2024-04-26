@@ -190,12 +190,21 @@ def home():
         year = request.args.get("year")
 
         team = Team.query.filter_by(team_name=team_name).first()
-        team_id = team.teamID
 
-        batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
-        pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
+        if team:
+            team_id = team.teamID
 
-        return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats)
+            batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
+            pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
+
+            if batting_stats and pitching_stats:
+
+                return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats)
+            else:
+                return render_template('404.html'), 404
+        else:
+            return render_template('404.html'), 404
+        
 
     team_names = db.session.query(Team.team_name).distinct().order_by(Team.team_name).all()
     # Convert the result to a list of strings
@@ -212,7 +221,10 @@ def home():
         else:
             team_years_dict[team] = [year]
 
-    return render_template('search.html', teams=team_names_list, team_years_dict=team_years_dict)
+    if request.args.get("prevTeam") and request.args.get("prevYear"):
+        return render_template('search.html', teams=team_names_list, team_years_dict=team_years_dict, prevTeam=request.args.get("prevTeam"), prevYear=request.args.get("prevYear"))
+    else:
+        return render_template('search.html', teams=team_names_list, team_years_dict=team_years_dict)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
