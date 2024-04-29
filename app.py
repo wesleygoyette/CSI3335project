@@ -1,4 +1,4 @@
-from csi3335sp2023 import mysql
+from csi3335sp2024 import mysql
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
