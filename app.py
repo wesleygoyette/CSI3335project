@@ -1,15 +1,17 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+import logging
+from csi3335sp2023 import mysql
+from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
-from wtforms import EmailField, PasswordField, SubmitField, StringField
+from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, EqualTo
 
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:abc12345@localhost/test'
+app.config['SECRET_KEY'] = 'fewfwfefgelkngelknglkenlknelgknlekngrlknelknelgkn'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{mysql['user']}:{mysql['password']}@{mysql['location']}/{mysql['database']}"
+
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
@@ -20,9 +22,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-
-    def __repr__(self):
-        return f"User('{self.id}', '{self.email}')"
+    isAdmin = db.Column(db.Boolean, nullable=False, default=False)
     
 class Team(db.Model):
     __tablename__ = 'teams'
@@ -103,6 +103,25 @@ class Batting(db.Model):
     b_SF = db.Column(db.SmallInteger)
     b_GIDP = db.Column(db.SmallInteger)
 
+    @property
+    def slugging_percentage(self):
+        return round(((self.b_HR * 4) + (self.b_3B * 3) + (self.b_2B * 2) + (self.b_H - self.b_3B - self.b_2B - self.b_HR)) / self.b_AB,2) if self.b_AB != 0 else 0
+
+    @property
+    def batting_average(self):
+        return round(self.b_H / self.b_AB, 2) if self.b_AB != 0 else 0
+
+    @property
+    def on_base_percentage(self):
+        ab = self.b_AB if self.b_AB is not None else 0
+        bb = self.b_BB if self.b_BB is not None else 0
+        hbp = self.b_HBP if self.b_HBP is not None else 0
+        sf = self.b_SF if self.b_SF is not None else 0
+        
+        denominator = ab + bb + hbp + sf
+        
+        return round((self.b_H + bb + hbp) / denominator, 2) if denominator != 0 else 0
+
 # Define the Pitching model
 class Pitching(db.Model):
     __tablename__ = 'pitching'
@@ -137,6 +156,18 @@ class Pitching(db.Model):
     p_SH = db.Column(db.SmallInteger)
     p_SF = db.Column(db.SmallInteger)
     p_GIDP = db.Column(db.SmallInteger)
+
+    @property
+    def IP(self):
+        return round(self.p_IPOuts / 3, 2) if self.p_IPOuts is not None else 0
+    
+    @property
+    def WHiP(self):
+        return round((self.p_BB + self.p_H) / (self.p_IPOuts / 3), 2) if self.p_IPOuts is not None and (self.p_BB + self.p_H) is not None else 0
+    
+    @property
+    def SO9(self):
+        return round(9 * self.p_SO / (self.p_IPOuts / 3), 2) if self.p_IPOuts is not None and self.p_SO is not None else 0
     
 # Define the People model
 class People(db.Model):
@@ -165,6 +196,29 @@ class People(db.Model):
     debutDate = db.Column(db.Date)
     finalGameDate = db.Column(db.Date)
 
+class Fielding(db.Model):
+    __tablename__ = 'fielding'
+    
+    fielding_ID = db.Column(db.Integer, primary_key=True)
+    playerID = db.Column(db.String(9), nullable=False)
+    yearID = db.Column(db.SmallInteger, nullable=False)
+    teamID = db.Column(db.String(3), nullable=False)
+    stint = db.Column(db.SmallInteger, nullable=False)
+    position = db.Column(db.String(2))  # nullable set to True as per the table description
+    f_G = db.Column(db.SmallInteger)
+    f_GS = db.Column(db.SmallInteger)
+    f_InnOuts = db.Column(db.SmallInteger)
+    f_PO = db.Column(db.SmallInteger)
+    f_A = db.Column(db.SmallInteger)
+    f_E = db.Column(db.SmallInteger)
+    f_DP = db.Column(db.SmallInteger)
+    f_PB = db.Column(db.SmallInteger)
+    f_WP = db.Column(db.SmallInteger)
+    f_SB = db.Column(db.SmallInteger)
+    f_CS = db.Column(db.SmallInteger)
+    f_ZR = db.Column(db.Float)
+
+
 class LoginForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -175,6 +229,15 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirmPassword = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+
+# Configure logging
+logging.basicConfig(filename='requests.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+@app.before_request
+def log_request_info():
+    if current_user.is_authenticated and current_user.email:
+        logging.info('User: %s %s', current_user.email, request.url)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -196,10 +259,11 @@ def home():
 
             batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
             pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
+            fielding_stats = db.session.query(Fielding, People).join(People, Fielding.playerID == People.playerID).filter(Fielding.teamID == team_id).group_by(Fielding.yearID, Fielding.position).order_by(People.playerID).all()
 
             if batting_stats and pitching_stats:
 
-                return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats)
+                return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats, fielding_stats=fielding_stats)
             else:
                 return render_template('404.html'), 404
         else:
@@ -268,6 +332,30 @@ def register():
             return render_template('register.html', form=form, error="Password must match")
 
     return render_template('register.html', form=form)
+
+@app.route('/admin', methods=['GET', 'POST'])
+@login_required
+def admin():
+    if not current_user.isAdmin:
+
+        return redirect(url_for('home'))
+    else:
+
+        all_lines = [] 
+        request_lines = [] 
+        total_requests = 0
+
+        with open('requests.log', 'r') as file:
+            for line in file:
+                all_lines.append(line.strip()) 
+
+                if 'User' in line:
+                    request_lines.append(line.strip())  
+                    total_requests += 1
+
+
+        
+        return render_template('admin.html', all_lines=all_lines, request_lines=request_lines, total_requests=total_requests)
 
 @app.errorhandler(404)
 def not_found_error(error):

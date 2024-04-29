@@ -1,0 +1,1 @@
+mysql = {'location':'localhost','user':'flask_user','password':'abc12345','database':'baseball_baddies'}

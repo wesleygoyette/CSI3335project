@@ -89,18 +89,10 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>G</th>
-                        <th>AB</th>
-                        <th>R</th>
-                        <th>H</th>
-                        <th>2B</th>
-                        <th>3B</th>
-                        <th>HR</th>
-                        <th>RBI</th>
-                        <th>SB</th>
-                        <th>CS</th>
-                        <th>BB</th>
-                        <th>SO</th>
+                        <th>Total Games</th>
+                        <th>Slugging Percentage</th>
+                        <th>Batting Average</th>
+                        <th>On-base Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,17 +100,9 @@
                         <tr>
                             <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
                             <td>{{ stat.b_G }}</td>
-                            <td>{{ stat.b_AB }}</td>
-                            <td>{{ stat.b_R }}</td>
-                            <td>{{ stat.b_H }}</td>
-                            <td>{{ stat.b_2B }}</td>
-                            <td>{{ stat.b_3B }}</td>
-                            <td>{{ stat.b_HR }}</td>
-                            <td>{{ stat.b_RBI }}</td>
-                            <td>{{ stat.b_SB }}</td>
-                            <td>{{ stat.b_CS }}</td>
-                            <td>{{ stat.b_BB }}</td>
-                            <td>{{ stat.b_SO }}</td>
+                            <td>{{ stat.slugging_percentage }}</td>
+                            <td>{{ stat.batting_average }}</td>
+                            <td>{{ stat.on_base_percentage }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -136,12 +120,9 @@
                         <th>CG</th>
                         <th>SHO</th>
                         <th>SV</th>
-                        <th>IPOuts</th>
-                        <th>H</th>
-                        <th>ER</th>
-                        <th>HR</th>
-                        <th>BB</th>
-                        <th>SO</th>
+                        <th>Innings Pitched</th>
+                        <th>WHIP</th>
+                        <th>Strikeouts per 9 innings</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -155,13 +136,35 @@
                             <td>{{ stat.p_CG }}</td>
                             <td>{{ stat.p_SHO }}</td>
                             <td>{{ stat.p_SV }}</td>
-                            <td>{{ stat.p_IPOuts }}</td>
-                            <td>{{ stat.p_H }}</td>
-                            <td>{{ stat.p_ER }}</td>
-                            <td>{{ stat.p_HR }}</td>
-                            <td>{{ stat.p_BB }}</td>
-                            <td>{{ stat.p_SO }}</td>
+                            <td>{{ stat.IP }}</td>
+                            <td>{{ stat.WHiP }}</td>
+                            <td>{{ stat.SO9 }}</td>
                         </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            <h2>Fielding Statistics (By Year and Position)</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Year</th>
+                        <th>Position</th>
+                        <th>Games played</th>  
+                        <th>Errors</th>  
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat, person in fielding_stats %}  
+                    <tr>
+                            <td>{{ person.nameFirst }} {{ person.nameLast }}</td>  
+                            <td>{{ stat.yearID }}</td>
+                            <td>{{ stat.position }}</td>
+                            <td>{{ stat.f_G }}</td>  
+                            <td>{{ stat.f_E }}</td>  
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
