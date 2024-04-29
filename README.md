@@ -33,9 +33,9 @@ This Flask application provides a platform to access and analyze baseball statis
    ```
 
 4. **Database Setup**:
-   - Ensure you have MySQL installed and running.
+   - Ensure you have MariaDB installed and running.
    - Create a MySQL database and import the provided database schema.
-   - Update the `mysql` dictionary in the `app.py` file with your MySQL database credentials.
+   - Update the `mysql` dictionary in the `csi3335sp2024.py` file with your MySQL database credentials.
 
 5. **Run the Application**:
    Run the Flask application:
@@ -43,29 +43,6 @@ This Flask application provides a platform to access and analyze baseball statis
    python app.py
    ```
    The app will be accessible at `http://localhost:3000` in your web browser.
-
-## Usage
-
-- **Register**: New users can register by providing a valid email and password.
-- **Login**: Registered users can log in to access the application's features.
-- **Home**: Upon login, users are directed to the home page where they can search for baseball statistics by team and year.
-- **Search**: Users can select a team and a year to view batting, pitching, and fielding statistics for that team in the specified year.
-- **Admin Dashboard**: Admin users have access to an admin dashboard where they can view user details and request logs.
-
-## File Structure
-
-- **app.py**: Main Flask application file containing routes and database models.
-- **templates/**: Directory containing HTML templates for rendering pages.
-- **static/**: Directory containing static files such as CSS stylesheets and JavaScript files.
-- **requirements.txt**: File listing all required Python dependencies.
-
-## Contributing
-
-Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Remember to deactivate the virtual environment once you're done:
 ```bash
