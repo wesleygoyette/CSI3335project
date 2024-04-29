@@ -1,0 +1,21 @@
+# Virtual environment
+/project_env/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# IDE files
+.vscode/
+*.pydevproject
+.idea/
+*.suo
+*.ntvs*
+
+# Logs
+*.log
+
