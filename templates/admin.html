@@ -1,74 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;  /* Center the container horizontally */
-            padding: 32px;
-        }
-
-        .card {
-            background-color: #ffffff;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            color: rgb(100,100,100);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 32px;
-        }
-
-        th, td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            position: sticky;  /* Fix table headers on scroll */
-            top: 0;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f5f5f5;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin</title>
+    </head>
+    <body>
         <h1>Admin</h1>
-        <div class="card">
-            <table>
-                <thead>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Users</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in user_details %}
                     <tr>
-                        <th>Requests (total: {{ total_requests }})</th>
+                        <td> {{ user.email }} </td> 
+                        <td> {{ user.isAdmin }} </td> 
                     </tr>
-                </thead>
-                <tbody>
-                    {% for request in request_lines %}
-                        <tr>
-                            <td> {{ request }} </td>  
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Requests (total: {{ total_requests }})</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in all_lines %}
+                    <tr>
+                        <td> {{ line }} </td> 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/">Home</a>
+    </body>
 </html>

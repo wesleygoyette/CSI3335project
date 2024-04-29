@@ -1,104 +1,28 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0px 16px;
-        }
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+    <body>
+        <form method="post">
 
-        form {
-            background-color: #ffffff;
-            padding: 50px 40px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            color: rgb(100,100,100);
-            margin: 0px 12px;
-        }
+            <h1>Welcome! 👋🏻</h1>
+            <p>Please sign-in to your account to get started</p>
 
-        h1 {
-            text-align: left;
-            font-weight: 500;
-        }
-
-        p {
-            text-align: left;
-            margin-bottom: 30px;
-        }
-
-        .register {
-
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        form div {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            background-color: rgb(105,108,255);
-            color: #ffffff;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            opacity: 90%;
-        }
-
-        input[type="submit"]:active {
-            opacity: 50%;
-        }
-    </style>
-</head>
-<body>
-    <form method="post">
-
-        <h1>Welcome! 👋🏻</h1>
-        <p>Please sign-in to your account to get started</p>
-
-        {{ form.hidden_tag() }}
-        <div>
-            <label for="email">Email</label>
-            {{ form.email() }}
-        </div>
-        <div>
-            <label for="password">Password</label>
-            {{ form.password() }}
-        </div>
-        <div>
-            {{ form.submit() }}
-        </div>
-        <p class="register">New on our platform? <a href="/register" style="color: rgb(105,108,255); text-decoration: none;">Create an account</span></p>
-    </form>
-</body>
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="email">Email</label>
+                {{ form.email() }}
+            </div>
+            <div>
+                <label for="password">Password</label>
+                {{ form.password() }}
+            </div>
+            <div>
+                {{ form.submit() }}
+            </div>
+            <p class="register">New on our platform? <a href="/register" style="color: rgb(105,108,255); text-decoration: none;">Create an account</span></p>
+        </form>
+    </body>
 </html>
