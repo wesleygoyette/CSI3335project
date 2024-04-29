@@ -237,7 +237,7 @@ logging.basicConfig(filename='requests.log', level=logging.INFO, format='%(ascti
 @app.before_request
 def log_request_info():
     if current_user.is_authenticated and current_user.email:
-        logging.info('User: %s %s', current_user.email, request.url)
+        logging.info('User-Email: %s %s', current_user.email, request.url)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -349,7 +349,7 @@ def admin():
             for line in file:
                 all_lines.append(line.strip()) 
 
-                if 'User' in line:
+                if 'User-Email' in line:
                     request_lines.append(line.strip())  
                     total_requests += 1
 
