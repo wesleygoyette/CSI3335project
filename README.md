@@ -48,3 +48,11 @@ Remember to deactivate the virtual environment once you're done:
 ```bash
 deactivate
 ```
+
+### New Features:
+
+- **Registration Functionality**: Users can now register accounts to personalize their experience and access additional features.
+  
+- **Search Persistence**: Improved search functionality now retains previous search queries, enhancing user convenience and navigation efficiency.
+  
+- **Team Page**: A new dedicated page has been added to display comprehensive information about teams, including years, wins, and losses, providing users with valuable insights into team performance over time.
