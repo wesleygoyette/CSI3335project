@@ -301,6 +301,7 @@ def home():
                 .join(Team, Team.yearID == Batting.yearID and Team.teamID == Batting.teamID) \
                 .join(People, People.playerID == Batting.playerID) \
                 .filter(Batting.yearID == year, Batting.teamID == team_id) \
+                .distinct() \
                 .all()
 
             batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
