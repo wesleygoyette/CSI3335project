@@ -297,7 +297,11 @@ def home():
         if team:
             team_id = team.teamID
 
-            roster = []
+            roster = db.session.query(Batting.playerID, People.nameFirst, People.nameLast) \
+                .join(Team, Team.yearID == Batting.yearID and Team.teamID == Batting.teamID) \
+                .join(People, People.playerID == Batting.playerID) \
+                .filter(Batting.yearID == year, Batting.teamID == team_id) \
+                .all()
 
             batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
             pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
