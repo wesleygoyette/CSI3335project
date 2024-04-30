@@ -58,6 +58,13 @@ This Flask application provides a platform to access and analyze baseball statis
    ```
    The app will be accessible at `http://localhost:3000` in your web browser.
 
+   To access an admin account
+   ```bash
+   user = admin@gmail.com
+   password = abc12345
+   ```
+   
+
 Remember to deactivate the virtual environment once you're done:
 ```bash
 deactivate
