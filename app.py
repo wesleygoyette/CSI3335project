@@ -297,11 +297,7 @@ def home():
         if team:
             team_id = team.teamID
 
-            roster = db.session.query(Batting.playerID, People.nameFirst, People.nameLast) \
-                .join(Team, Team.yearID == Batting.yearID and Team.teamID == Batting.teamID) \
-                .join(People, People.playerID == Batting.playerID) \
-                .filter(Batting.yearID == year, Batting.teamID == team_id) \
-                .all()
+            roster = []
 
             batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
             pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
@@ -316,6 +312,20 @@ def home():
         else:
             return render_template('404.html'), 404
         
+    elif request.args.get("team"):
+
+        team_name = request.args.get("team")
+
+        team = Team.query.filter_by(team_name=team_name).first()
+
+        if team:
+            team_id = team.teamID
+
+            teams = Team.query.filter_by(teamID=team_id).all()
+
+            return render_template('team.html', teams=teams, team_name=team_name)
+        else:
+            return render_template('404.html'), 404
 
     team_names = db.session.query(Team.team_name).distinct().order_by(Team.team_name).all()
     # Convert the result to a list of strings

@@ -73,8 +73,13 @@
                 border: none;
             }
 
-            a {
-                margin-top: 32px;
+            form {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+
+            a, button {
                 padding: 12px;
                 border: none;
                 border-radius: 4px;
@@ -85,6 +90,7 @@
                 cursor: pointer;
                 text-align: center;
                 text-decoration: none;
+                height: fit-content;
             }
 
             a:hover {
@@ -99,7 +105,13 @@
     <body>
         <div class="container">
             <div class="card">
-                <h1>The {{ year }} {{ team }}</h1>
+
+                <form action="/">
+
+                    <h1>The {{ year }} {{ team }}</h1>
+
+                    <button type="submit" name="team" value="{{ request.args.get('team') }}">Go to Team</button>
+                </form>
                 
                 <h2>Roster</h2>
                 <div class="scrollable-wrapper">
