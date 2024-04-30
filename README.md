@@ -32,12 +32,26 @@ This Flask application provides a platform to access and analyze baseball statis
    pip install -r requirements.txt
    ```
 
-4. **Database Setup**:
+   Ensure you have installed these flask libraries
+   ```bash
+   pip install flask_login
+   pip install flask_wtf
+   pip install flask_sqlalchemy
+   pip install pymysql
+   pip install "flask<3" "werkzeug<3"
+   ```
+
+5. **Database Setup**:
    - Ensure you have MariaDB installed and running.
-   - Create a MySQL database and import the provided database schema.
+   - Create a MySQL database called baseball_baddies and import the provided database schema
+   ```SQL
+   CREATE DATABASE baseball_baddies;
+   USE baseball_baddies;
+   \. baseballbaddies.sql
+   ```
    - Update the `mysql` dictionary in the `csi3335sp2024.py` file with your MySQL database credentials.
 
-5. **Run the Application**:
+6. **Run the Application**:
    Run the Flask application:
    ```bash
    python app.py
