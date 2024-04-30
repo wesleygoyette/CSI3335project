@@ -260,7 +260,7 @@ def register():
 
             return redirect(url_for('login'))
         else:
-            return render_template('register.html', form=form, error="Password must match")
+            return render_template('register.html', form=form, error="Passwords must match")
 
     return render_template('register.html', form=form)
 
@@ -297,13 +297,20 @@ def home():
         if team:
             team_id = team.teamID
 
+            roster = db.session.query(Batting.playerID, People.nameFirst, People.nameLast) \
+                .join(Team, Team.yearID == Batting.yearID and Team.teamID == Batting.teamID) \
+                .join(People, People.playerID == Batting.playerID) \
+                .filter(Batting.yearID == year, Batting.teamID == team_id) \
+                .all()
+
             batting_stats = db.session.query(Batting, People).join(People, Batting.playerID == People.playerID).filter(Batting.teamID == team_id, Batting.yearID == year).all()
             pitching_stats = db.session.query(Pitching, People).join(People, Pitching.playerID == People.playerID).filter(Pitching.teamID == team_id, Pitching.yearID == year).all()
             fielding_stats = db.session.query(Fielding, People).join(People, Fielding.playerID == People.playerID).filter(Fielding.teamID == team_id).group_by(Fielding.yearID, Fielding.position).order_by(People.playerID).all()
 
+
             if batting_stats and pitching_stats:
 
-                return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats, fielding_stats=fielding_stats)
+                return render_template('result.html', team=team_name, year=year, batting_stats=batting_stats, pitching_stats=pitching_stats, fielding_stats=fielding_stats, roster=roster)
             else:
                 return render_template('404.html'), 404
         else:

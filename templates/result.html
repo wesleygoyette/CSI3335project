@@ -3,96 +3,213 @@
     <head>
         <meta charset="UTF-8">
         <title>The {{ year }} {{ team }}</title>
+        <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f4f4f4;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 128px 16px;
+            }
+
+            .container {
+                width: 100%;
+                min-width: 300px;
+                max-width: 800px;
+            }
+
+            .card {
+                background-color: #ffffff;
+                padding: 50px 40px;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                color: rgb(100,100,100);
+                display: flex;
+                flex-direction: column;
+            }
+
+            h1, h2 {
+                text-align: left;
+                font-weight: 100;
+            }
+
+            .scrollable-wrapper {
+                max-height: 300px; 
+                overflow: auto;
+                border-collapse: collapse;
+                margin-bottom: 32px;
+            }
+
+            .scrollable-wrapper table thead th {
+                background: #e6e6e6;
+                position: sticky;
+                top: 0;
+                box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+                border: none;
+            }
+
+            .scrollable-wrapper table {
+                
+                width: 100%; 
+            }
+
+            .scrollable-wrapper th,
+            .scrollable-wrapper td {
+                padding: 10px;
+                text-align: left;
+                border: none;
+            }
+
+            .scrollable-wrapper th {
+                background-color: #f2f2f2;
+                border: none;
+            }
+
+            .scrollable-wrapper tr:nth-child(even) {
+                background-color: #f5f5f5;
+                border: none;
+            }
+
+            a {
+                margin-top: 32px;
+                padding: 12px;
+                border: none;
+                border-radius: 4px;
+                background-color: rgb(105,108,255);
+                color: #ffffff;
+                font-weight: 600;
+                font-size: 0.9rem;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+            }
+
+            a:hover {
+                opacity: 90%;
+            }
+
+            a:active {
+                opacity: 50%;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
             <div class="card">
                 <h1>The {{ year }} {{ team }}</h1>
                 
-                <h2>Batting Statistics</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Total Games</th>
-                            <th>Slugging Percentage</th>
-                            <th>Batting Average</th>
-                            <th>On-base Percentage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat, person in batting_stats %}
+                <h2>Roster</h2>
+                <div class="scrollable-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
-                                <td>{{ stat.b_G }}</td>
-                                <td>{{ stat.slugging_percentage }}</td>
-                                <td>{{ stat.batting_average }}</td>
-                                <td>{{ stat.on_base_percentage }}</td>
+                                <th>Name</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                            <tbody>
+                                {% for person in roster %}
+                                    <tr>
+                                        <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                    </table>
+                </div>
+
+                <h2>Batting Statistics</h2>
+                
+                <div class="scrollable-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Total Games</th>
+                                <th>Slugging Percentage</th>
+                                <th>Batting Average</th>
+                                <th>On-base Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat, person in batting_stats %}
+                                <tr>
+                                    <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
+                                    <td>{{ stat.b_G }}</td>
+                                    <td>{{ stat.slugging_percentage }}</td>
+                                    <td>{{ stat.batting_average }}</td>
+                                    <td>{{ stat.on_base_percentage }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 
                 <h2>Pitching Statistics</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>W</th>
-                            <th>L</th>
-                            <th>G</th>
-                            <th>GS</th>
-                            <th>CG</th>
-                            <th>SHO</th>
-                            <th>SV</th>
-                            <th>Innings Pitched</th>
-                            <th>WHIP</th>
-                            <th>Strikeouts per 9 innings</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat, person in pitching_stats %}
+                <div class="scrollable-wrapper">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
-                                <td>{{ stat.p_W }}</td>
-                                <td>{{ stat.p_L }}</td>
-                                <td>{{ stat.p_G }}</td>
-                                <td>{{ stat.p_GS }}</td>
-                                <td>{{ stat.p_CG }}</td>
-                                <td>{{ stat.p_SHO }}</td>
-                                <td>{{ stat.p_SV }}</td>
-                                <td>{{ stat.IP }}</td>
-                                <td>{{ stat.WHiP }}</td>
-                                <td>{{ stat.SO9 }}</td>
+                                <th>Name</th>
+                                <th>W</th>
+                                <th>L</th>
+                                <th>G</th>
+                                <th>GS</th>
+                                <th>CG</th>
+                                <th>SHO</th>
+                                <th>SV</th>
+                                <th>Innings Pitched</th>
+                                <th>WHIP</th>
+                                <th>Strikeouts per 9 innings</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for stat, person in pitching_stats %}
+                                <tr>
+                                    <td>{{ person.nameFirst }} {{ person.nameLast }}</td>
+                                    <td>{{ stat.p_W }}</td>
+                                    <td>{{ stat.p_L }}</td>
+                                    <td>{{ stat.p_G }}</td>
+                                    <td>{{ stat.p_GS }}</td>
+                                    <td>{{ stat.p_CG }}</td>
+                                    <td>{{ stat.p_SHO }}</td>
+                                    <td>{{ stat.p_SV }}</td>
+                                    <td>{{ stat.IP }}</td>
+                                    <td>{{ stat.WHiP }}</td>
+                                    <td>{{ stat.SO9 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
 
                 <h2>Fielding Statistics (By Year and Position)</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Year</th>
-                            <th>Position</th>
-                            <th>Games played</th>  
-                            <th>Errors</th>  
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat, person in fielding_stats %}  
-                        <tr>
-                                <td>{{ person.nameFirst }} {{ person.nameLast }}</td>  
-                                <td>{{ stat.yearID }}</td>
-                                <td>{{ stat.position }}</td>
-                                <td>{{ stat.f_G }}</td>  
-                                <td>{{ stat.f_E }}</td>  
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="scrollable-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Year</th>
+                                <th>Position</th>
+                                <th>Games played</th>  
+                                <th>Errors</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat, person in fielding_stats %}  
+                            <tr>
+                                    <td>{{ person.nameFirst }} {{ person.nameLast }}</td>  
+                                    <td>{{ stat.yearID }}</td>
+                                    <td>{{ stat.position }}</td>
+                                    <td>{{ stat.f_G }}</td>  
+                                    <td>{{ stat.f_E }}</td>  
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
                 <a href="{{ url_for('home', prevTeam=team, prevYear=year) }}">Search again</a>
             </div>
